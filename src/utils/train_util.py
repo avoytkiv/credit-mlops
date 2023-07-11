@@ -2,6 +2,7 @@ from sklearn.cluster import KMeans, AgglomerativeClustering, DBSCAN
 from sklearn.metrics import silhouette_score, make_scorer
 from sklearn.model_selection import GridSearchCV
 from typing import Dict, Text
+from itertools import product
 import pandas as pd
 
 class UnsupportedClusterer(Exception):
@@ -21,8 +22,7 @@ def get_supported_clusterer() -> Dict:
 def cluster(
     df: pd.DataFrame,
     estimator_name: Text,
-    param_grid: Dict,
-    cv: int,
+    param_grid: Dict
 ):
     """Cluster data.
     Args:
@@ -38,12 +38,35 @@ def cluster(
     if estimator_name not in clusterers.keys():
         raise UnsupportedClusterer(estimator_name)
 
-    clusterer = clusterers[estimator_name]()
-    silhouette_scorer = make_scorer(silhouette_score)
-    clf = GridSearchCV(
-        estimator=clusterer, param_grid=param_grid, cv=cv, verbose=1, scoring=silhouette_scorer
-    )
+    clusterer_class = clusterers[estimator_name]
     X_train = df.values.astype("float32")
-    clf.fit(X_train)
 
-    return clf
+    # Get list of all parameter combinations
+    param_names = param_grid.keys()
+    param_values = param_grid.values()
+    all_params = list(product(*param_values))
+
+    best_score = -1  # Initialize best_score to lowest possible silhouette score
+    best_model = None
+
+    # Perform grid search manually
+    for params in all_params:
+        # Create dict of parameters
+        param_dict = dict(zip(param_names, params))
+
+        # Initialize and fit model
+        model = clusterer_class(**param_dict)
+        labels = model.fit_predict(X_train)
+
+        # Compute silhouette score
+        score = silhouette_score(X_train, labels)
+
+        # If this model is better than the previous best, update best_score and best_model
+        if score > best_score:
+            best_score = score
+            best_model = model
+
+    # Add an attribute to the model to store the best score
+    best_model.best_score_ = best_score
+
+    return best_model
