@@ -1,0 +1,34 @@
+base:
+  random_state: 42
+  log_level: INFO
+
+data_load:
+  dataset_csv: data/raw/Customer_Data.csv
+
+featurize:
+  features_path: data/processed/processed_data.csv
+  n_clusters: 6
+
+train:
+  estimator_name: kmeans
+  estimators:
+    kmeans:
+      param_grid:
+        n_clusters: [2, 3, 4]
+    agglo:
+      param_grid:
+        n_clusters: [2, 3, 4]
+        linkage: ["ward", "complete", "average"]
+    dbscan:
+      param_grid:
+        eps: [0.3, 0.5]
+        min_samples: [5, 10]
+
+model_path: models/model.pkl
+
+reports:
+  reports_dir: reports
+  plots_dir: reports/figures
+  metrics_file: metrics.json
+  silhouette_plot: silhouette_plot.png
+  elbow_plot: elbow_plot.png
