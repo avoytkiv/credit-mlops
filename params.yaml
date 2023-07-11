@@ -13,11 +13,13 @@ featurize:
   n_components: 6
 
 train:
+  cv: 5
   estimator_name: kmeans
   estimators:
     kmeans:
       param_grid:
         n_clusters: [2, 3, 4]
+        n_init: [10]
     agglo:
       param_grid:
         n_clusters: [2, 3, 4]
@@ -27,7 +29,7 @@ train:
         eps: [0.3, 0.5]
         min_samples: [5, 10]
 
-model_path: models/model.pkl
+  model_path: models/model.pkl
 
 reports:
   reports_dir: reports
