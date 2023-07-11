@@ -5,9 +5,12 @@ base:
 data_load:
   dataset_csv: data/raw/Customer_Data.csv
 
+data_preprocessing:
+  dataset_processed: data/processed/processed_data.csv
+
 featurize:
-  features_path: data/processed/processed_data.csv
-  n_clusters: 6
+  features_path: data/processed/featurized_data.csv
+  n_components: 6
 
 train:
   estimator_name: kmeans

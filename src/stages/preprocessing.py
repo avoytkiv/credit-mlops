@@ -44,7 +44,7 @@ def data_load(config_path: Text) -> None:
     logger.info("Remove outliers")
     df = remove_outliers(df)
     logger.info("Save raw data")
-    df.to_csv(config["featurize"]["features_path"], index=False)
+    df.to_csv(config["data_preprocessing"]["dataset_processed"], index=False)
 
 
 
