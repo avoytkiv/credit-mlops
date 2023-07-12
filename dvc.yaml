@@ -4,15 +4,16 @@ stages:
     deps:
     - src/stages/preprocessing.py
     params:
+    - base
     - data_load
     outs:
-    - data/processes/preprocessed_data.csv
+    - data/processed/processed_data.csv
   
   featurize:
     cmd: python src/stages/featurizing.py --config=params.yaml
     deps:
-    - data/processed/preprocessed_data.csv
-    - python src/stages/featurizing.py
+    - data/processed/processed_data.csv
+    - src/stages/featurizing.py
     params:
     - data_preprocessing
     - featurize
@@ -39,7 +40,7 @@ stages:
     deps:
     - data/processed/featurized_data.csv
     - models/model.pkl
-    - python src/stages/visualizing.py
+    - src/stages/visualizing.py
     params:
     - base
     - data_preprocessing
