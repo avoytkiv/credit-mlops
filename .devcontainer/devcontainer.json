@@ -46,7 +46,8 @@
 				"mechatroner.rainbow-csv",
 				"adpyke.codesnap",
 				"george-alisson.html-preview-vscode",
-				"mhutchie.git-graph"
+				"mhutchie.git-graph",
+				"amazonwebservices.aws-toolkit-vscode"
 			]
 		}
 	}
