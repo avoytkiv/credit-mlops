@@ -10,7 +10,7 @@ stages:
     params:
       params.yaml:
         base:
-          random_state: 43
+          random_state: 42
           log_level: INFO
         data_load:
           dataset_csv: data/raw/Customer_Data.csv
@@ -56,7 +56,7 @@ stages:
     params:
       params.yaml:
         base:
-          random_state: 43
+          random_state: 42
           log_level: INFO
         featurize:
           features_path: data/processed/featurized_data.csv
@@ -119,7 +119,7 @@ stages:
     params:
       params.yaml:
         base:
-          random_state: 43
+          random_state: 42
           log_level: INFO
         data_preprocessing:
           dataset_processed: data/processed/processed_data.csv
