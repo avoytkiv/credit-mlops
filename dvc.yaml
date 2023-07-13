@@ -19,6 +19,7 @@ stages:
     - featurize
     outs:
     - data/processed/featurized_data.csv
+    - models/featurizer.pkl
   
   train:
     cmd: python src/stages/training.py --config=params.yaml
@@ -38,9 +39,11 @@ stages:
   visualize:
     cmd: python src/stages/visualizing.py --config=params.yaml
     deps:
-    - data/processed/featurized_data.csv
+    - data/processed/processed_data.csv
     - models/model.pkl
+    - models/featurizer.pkl
     - src/stages/visualizing.py
+    - src/utils/visualize_util.py
     params:
     - base
     - data_preprocessing
