@@ -28,27 +28,32 @@ stages:
       size: 786359
     - path: src/stages/featurizing.py
       hash: md5
-      md5: 37664ebef05370c5b08d0d963a6f16ab
-      size: 1475
+      md5: b219607904a11df9a5c84496fd6f29e3
+      size: 1579
     params:
       params.yaml:
         data_preprocessing:
           dataset_processed: data/processed/processed_data.csv
         featurize:
           features_path: data/processed/featurized_data.csv
+          model_path: models/featurizer.pkl
           n_components: 6
     outs:
     - path: data/processed/featurized_data.csv
       hash: md5
-      md5: 7d22a719f7aa38bebcb5988de666195c
-      size: 865019
+      md5: 098a75f41b6ee6a454dda9b9a3ea911a
+      size: 864845
+    - path: models/featurizer.pkl
+      hash: md5
+      md5: 84820e6ebd2814e8bd2b4f28f7107479
+      size: 2029
   train:
     cmd: python src/stages/training.py --config=params.yaml
     deps:
     - path: data/processed/featurized_data.csv
       hash: md5
-      md5: 7d22a719f7aa38bebcb5988de666195c
-      size: 865019
+      md5: 098a75f41b6ee6a454dda9b9a3ea911a
+      size: 864845
     - path: src/stages/training.py
       hash: md5
       md5: 466e58b5ba82e36d6c37bea90213980b
@@ -60,6 +65,7 @@ stages:
           log_level: INFO
         featurize:
           features_path: data/processed/featurized_data.csv
+          model_path: models/featurizer.pkl
           n_components: 6
         train:
           cv: 5
@@ -95,27 +101,35 @@ stages:
     outs:
     - path: models/model.pkl
       hash: md5
-      md5: b9c4e233e1e8745901ae9cf840735457
+      md5: 22522459c6b352f70268818ee9459397
       size: 30252
     - path: reports/metrics.json
       hash: md5
-      md5: 51345c0dffc2f062a079a9ac8334e765
+      md5: b6711ccd5186eca76e7a7f8f184439a1
       size: 34
   visualize:
     cmd: python src/stages/visualizing.py --config=params.yaml
     deps:
-    - path: data/processed/featurized_data.csv
+    - path: data/processed/processed_data.csv
       hash: md5
-      md5: 7d22a719f7aa38bebcb5988de666195c
-      size: 865019
+      md5: 8aff64ed9940f4339131242b798291d5
+      size: 786359
+    - path: models/featurizer.pkl
+      hash: md5
+      md5: 84820e6ebd2814e8bd2b4f28f7107479
+      size: 2029
     - path: models/model.pkl
       hash: md5
-      md5: b9c4e233e1e8745901ae9cf840735457
+      md5: 22522459c6b352f70268818ee9459397
       size: 30252
     - path: src/stages/visualizing.py
       hash: md5
-      md5: 8a411ae6616f55f9f1b943c19949bab6
-      size: 1640
+      md5: c6400af1746f690e0b813a8c91881050
+      size: 1546
+    - path: src/utils/visualize_util.py
+      hash: md5
+      md5: 4f34ab90ff70386ed43addb820aab79a
+      size: 2414
     params:
       params.yaml:
         base:
@@ -132,5 +146,5 @@ stages:
     outs:
     - path: reports/figures/clusters.png
       hash: md5
-      md5: e3bcd086540d93ddc806e2b372a73b19
-      size: 52418
+      md5: f1d69007b1acee8aec682fbfb30ab158
+      size: 51323
