@@ -27,19 +27,15 @@ def visualize(config_path: Text) -> None:
 
     logger = get_logger("VISUALIZE", log_level=config["base"]["log_level"])
 
-    logger.info("Load model")
+    logger.info("Load model and featurizer")
     model = joblib.load(config["train"]["model_path"])
-    
-    logger.info("Model labels")
+    pca = joblib.load(config["featurize"]["model_path"])
+    # Labels are the cluster numbers
     labels = model.labels_
-
-    logger.info("Compute PCA components")
+    
+    logger.info("Featurize data")
     df = pd.read_csv(config["data_preprocessing"]["dataset_processed"])
-    n_components = config["featurize"]["n_components"]
-    scaler = StandardScaler()
-    data_standardized = scaler.fit_transform(df)
-    pca = PCA(n_components=n_components)
-    pca_components = pca.fit_transform(data_standardized)
+    pca_components = pca.transform(StandardScaler().fit_transform(df))
     
     logger.info("Plot clusters")
     plot_clusters(pca_components, labels)

@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+import joblib
 
 src_path = Path(__file__).parent.parent.parent.resolve()
 sys.path.append(str(src_path))
@@ -35,6 +36,8 @@ def featurizing(config_path: Text) -> None:
     data_pca = pca.fit_transform(data_standardized)
     logger.info("Save processed data")
     pd.DataFrame(data_pca).to_csv(config["featurize"]["features_path"], index=False)
+    logger.info("Save PCA model")
+    joblib.dump(pca, config["featurize"]["model_path"])
 
 
 if __name__ == "__main__":
