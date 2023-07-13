@@ -1,0 +1,35 @@
+name: Deploy-dev
+on:
+  push:
+    tags:
+      - "*#dev*"
+jobs:
+  deploy-dev:
+    runs-on: ubuntu-latest
+    environment: cloud
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.11"
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-west-1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Pull Model
+        run: |
+            pip install dvc[s3]
+            dvc pull models/model.joblib
+      - name: Deploy
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}} 
+          heroku_app_name: "iris-mlops" 
+          heroku_email: "andrii.voitkiv1@ucalgary.ca" 
+          usedocker: true
