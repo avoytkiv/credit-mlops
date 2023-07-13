@@ -25,11 +25,12 @@ jobs:
       - name: Pull Model
         run: |
             pip install dvc[s3]
-            dvc pull models/model.joblib
+            dvc pull models/model.pkl
+            dvc pull models/featurizer.pkl
       - name: Deploy
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}} 
-          heroku_app_name: "iris-mlops" 
+          heroku_app_name: "credit-mlops" 
           heroku_email: "andrii.voitkiv1@ucalgary.ca" 
           usedocker: true
