@@ -14,7 +14,7 @@ featurize:
 
 train:
   cv: 5
-  estimator_name: kmeans
+  estimator_name: dbscan
   estimators:
     kmeans:
       param_grid:
@@ -23,7 +23,7 @@ train:
     agglo:
       param_grid:
         n_clusters: [2, 3, 4]
-        linkage: ["ward", "complete", "average"]
+        linkage: [ward, complete, average]
     dbscan:
       param_grid:
         eps: [0.3, 0.5]
