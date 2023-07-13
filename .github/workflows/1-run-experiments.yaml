@@ -88,7 +88,7 @@ jobs:
           dvc metrics show --md >> report.md
           # cat reports/metrics.json >> report.md
           echo "## Params" >> report.md
-          dvc params diff dvc-init --md >> report.md
+          dvc params diff main --md >> report.md
           echo "## Confusion matrix" >> report.md
           # "cml publish" is deprecated since "cml comment" now supports "![inline](./asset.png)"
           # cml publish reports/confusion_matrix.png --md >> report.md
