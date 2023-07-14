@@ -69,7 +69,7 @@ stages:
           n_components: 6
         train:
           cv: 5
-          estimator_name: dbscan
+          estimator_name: kmeans
           estimators:
             kmeans:
               param_grid:
@@ -101,12 +101,12 @@ stages:
     outs:
     - path: models/model.pkl
       hash: md5
-      md5: ab241bd149e1432795b560428c290eae
-      size: 148181
+      md5: b6c4c5ac461a392c3499c99adee5f45d
+      size: 30252
     - path: reports/metrics.json
       hash: md5
-      md5: b783f387f0aa30844147a9196ae7c52b
-      size: 35
+      md5: 2c865a2591420e79db475d8297ae28bd
+      size: 33
   visualize:
     cmd: python src/stages/visualizing.py --config=params.yaml
     deps:
@@ -120,8 +120,8 @@ stages:
       size: 2029
     - path: models/model.pkl
       hash: md5
-      md5: ab241bd149e1432795b560428c290eae
-      size: 148181
+      md5: b6c4c5ac461a392c3499c99adee5f45d
+      size: 30252
     - path: src/stages/visualizing.py
       hash: md5
       md5: c6400af1746f690e0b813a8c91881050
@@ -146,5 +146,5 @@ stages:
     outs:
     - path: reports/figures/clusters.png
       hash: md5
-      md5: 95797dfa4201fa086d26746e371530b2
-      size: 58582
+      md5: 992ed459c0f1d0d3ae3e95deeb742dd1
+      size: 53315
