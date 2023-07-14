@@ -52,6 +52,7 @@ def predict(data):
     return prediction
 
 
+
 # Defining the root endpoint of the API
 @app.get('/')
 def index():
@@ -67,9 +68,5 @@ def get_prediction(data: ModelInput):
     Defining the prediction endpoint of the API
     '''
     data = data.dict()
-    print(data)
-    data = pd.DataFrame([data])
-    print(data.head())
-
-    prediction = model.predict(data)[0]
-    return str(prediction)  
+    prediction = predict(data)  # Calls the predict function
+    return str(prediction)
