@@ -15,7 +15,7 @@ featurize:
 
 train:
   cv: 5
-  estimator_name: dbscan
+  estimator_name: kmeans
   estimators:
     kmeans:
       param_grid:
