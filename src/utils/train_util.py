@@ -39,7 +39,7 @@ def cluster(
         raise UnsupportedClusterer(estimator_name)
 
     clusterer_class = clusterers[estimator_name]
-    X_train = df.values.astype("float32")
+    X_train = df.values.astype("double")
 
     # Get list of all parameter combinations
     param_names = param_grid.keys()
