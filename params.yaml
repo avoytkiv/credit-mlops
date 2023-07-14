@@ -10,6 +10,7 @@ data_preprocessing:
 
 featurize:
   features_path: data/processed/featurized_data.csv
+  model_path: models/featurizer.pkl
   n_components: 6
 
 train:
