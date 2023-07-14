@@ -58,6 +58,10 @@ stages:
       hash: md5
       md5: 466e58b5ba82e36d6c37bea90213980b
       size: 1765
+    - path: src/utils/train_util.py
+      hash: md5
+      md5: 5faed4f352bccffe6257b08678ad5201
+      size: 2131
     params:
       params.yaml:
         base:
@@ -101,12 +105,12 @@ stages:
     outs:
     - path: models/model.pkl
       hash: md5
-      md5: 22522459c6b352f70268818ee9459397
-      size: 30252
+      md5: ed0d857ea862a72b1ab312b83fa1fcbd
+      size: 30288
     - path: reports/metrics.json
       hash: md5
-      md5: b6711ccd5186eca76e7a7f8f184439a1
-      size: 34
+      md5: bbab00c4978e5d5e1e9af32cacf776e0
+      size: 42
   visualize:
     cmd: python src/stages/visualizing.py --config=params.yaml
     deps:
@@ -120,8 +124,8 @@ stages:
       size: 2029
     - path: models/model.pkl
       hash: md5
-      md5: 22522459c6b352f70268818ee9459397
-      size: 30252
+      md5: ed0d857ea862a72b1ab312b83fa1fcbd
+      size: 30288
     - path: src/stages/visualizing.py
       hash: md5
       md5: c6400af1746f690e0b813a8c91881050
@@ -146,5 +150,5 @@ stages:
     outs:
     - path: reports/figures/clusters.png
       hash: md5
-      md5: f1d69007b1acee8aec682fbfb30ab158
-      size: 51323
+      md5: fb694a36fb1c4d9eae05af826502ca30
+      size: 53334
