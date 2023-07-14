@@ -26,6 +26,7 @@ stages:
     deps:
     - data/processed/featurized_data.csv
     - src/stages/training.py
+    - src/utils/train_util.py
     params:
     - base
     - featurize
