@@ -1,0 +1,10 @@
+autoencoder_parameters:
+  encoding_dim: 10  # Dimensionality of the latent space representation
+
+autoencoder_hyperparameters:
+  activation: "relu" # "relu", "sigmoid", "tanh"
+  optimizer: "adam" # "adam", "sgd", "rmsprop"
+  loss: "mean_squared_error" # "mean_squared_error", "binary_crossentropy"
+  epochs: 100
+  batch_size: 16
+  validation_split: 0.2
