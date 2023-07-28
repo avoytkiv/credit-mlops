@@ -1,0 +1,3 @@
+aram_grid:
+  n_clusters: [2, 3, 4]
+  n_init: [10]
