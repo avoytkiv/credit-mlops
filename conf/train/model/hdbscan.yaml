@@ -1,0 +1,4 @@
+param_grid:
+  min_cluster_size: [5, 10]
+  min_samples: [5, 10]
+  cluster_selection_epsilon: [0.3, 0.5]

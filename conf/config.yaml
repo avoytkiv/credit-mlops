@@ -1,8 +1,8 @@
 defaults:
   - main_config.yaml
+  - train/base.yaml
   - featurize: pca
   - train/model: dbscan
-  - reports:
       
 
 
