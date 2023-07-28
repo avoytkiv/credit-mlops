@@ -7,3 +7,11 @@ data_load:
 
 data_preprocessing:
   dataset_processed: data/processed/processed_data.csv
+
+reports:
+  base_dir: reports
+  plots_dir: figures
+  metrics_file: metrics.json
+  plots:
+    silhouette: silhouette_plot.png
+    elbow: elbow_plot.png
