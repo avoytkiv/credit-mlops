@@ -1,4 +1,5 @@
 from sklearn.cluster import KMeans, AgglomerativeClustering, DBSCAN
+from hdbscan import HDBSCAN
 from sklearn.metrics import silhouette_score, make_scorer
 from sklearn.model_selection import GridSearchCV
 from typing import Dict, Text
@@ -6,8 +7,8 @@ from itertools import product
 import pandas as pd
 
 class UnsupportedClusterer(Exception):
-    def __init__(self, estimator_name):
-        self.msg = f"Unsupported estimator {estimator_name}"
+    def __init__(self, model_name):
+        self.msg = f"Unsupported estimator {model_name}"
         super().__init__(self.msg)
 
 
@@ -16,18 +17,21 @@ def get_supported_clusterer() -> Dict:
     Returns:
         Dict: supported clusterers
     """
-    return {"kmeans": KMeans, "agglo": AgglomerativeClustering, "dbscan": DBSCAN}
+    return {"kmeans": KMeans, 
+            "agglo": AgglomerativeClustering, 
+            "dbscan": DBSCAN, 
+            "hdbscan": HDBSCAN}
 
 
 def cluster(
     df: pd.DataFrame,
-    estimator_name: Text,
+    model_name: Text,
     param_grid: Dict
 ):
     """Cluster data.
     Args:
         df {pandas.DataFrame}: dataset
-        estimator_name {Text}: estimator name
+        model_name {Text}: estimator name
         param_grid {Dict}: grid parameters
         cv {int}: cross-validation value
     Returns:
@@ -35,10 +39,10 @@ def cluster(
     """
     clusterers = get_supported_clusterer()
 
-    if estimator_name not in clusterers.keys():
-        raise UnsupportedClusterer(estimator_name)
+    if model_name not in clusterers.keys():
+        raise UnsupportedClusterer(model_name)
 
-    clusterer_class = clusterers[estimator_name]
+    clusterer_class = clusterers[model_name]
     X_train = df.values.astype("double")
 
     # Get list of all parameter combinations
