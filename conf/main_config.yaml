@@ -2,11 +2,9 @@ base:
   random_state: 42
   log_level: INFO
 
-data_load:
-  dataset_csv: data/raw/Customer_Data.csv
-
-data_preprocessing:
-  dataset_processed: data/processed/processed_data.csv
+data:
+  data_load: data/raw/Customer_Data.csv
+  data_preprocessing: data/processed/processed_data.csv
 
 reports:
   base_dir: reports

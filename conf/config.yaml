@@ -1,6 +1,6 @@
 defaults:
   - main_config.yaml
   - train/base.yaml
-  - featurize: pca # autoencoder, pca
+  - featurize/featurizer: pca # autoencoder, pca
   - train/model: dbscan # agglo, kmeans, dbscan, hdbscan
       
