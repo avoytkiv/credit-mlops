@@ -5,6 +5,7 @@ base:
 data:
   data_load: data/raw/Customer_Data.csv
   data_preprocessing: data/processed/processed_data.csv
+  data_featurized: data/processed/featurized_data.csv
 
 reports:
   base_dir: reports
