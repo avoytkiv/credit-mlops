@@ -1,9 +1,10 @@
-import argparse
 import json
 import joblib
 import pandas as pd
 from pathlib import Path
 import sys
+import matplotlib.pyplot as plt
+import seaborn as sns
 import dvc.api
 
 src_path = Path(__file__).parent.parent.parent.resolve()
@@ -29,7 +30,7 @@ def train_model() -> None:
 
     logger.info("Train model")
 
-    model = cluster(
+    model, labels = cluster(
         df=train_df,
         model_name=model_name,
         param_grid=config["train"]["model"]["param_grid"]
@@ -47,6 +48,21 @@ def train_model() -> None:
     metrics_path = Path(config["reports"]["base_dir"]) / config["reports"]["metrics_file"]
     json.dump(report, open(metrics_path, "w"))
     logger.info("Metrics saved")
+
+    logger.info("Plot clusters")
+    # Create a scatter plot of the featurized data with different colors for each cluster
+    plt.figure(figsize=(8, 6))
+    sns.scatterplot(x=train_df.iloc[:, 0], y=train_df.iloc[:, 1], hue=labels, palette='viridis')
+    plt.title(f"Clusters for {model_name}")
+    plt.xlabel("Component 1")
+    plt.ylabel("Component 2")
+    plt.legend(title='Cluster Label', loc='upper right')
+    plt.show()
+
+    logger.info("Save plot")
+    plt.savefig(Path(config["reports"]["base_dir"]) / 
+                Path(config["reports"]["plots_dir"]) / 
+                Path(config["reports"]["plots"]["clusters"]))
 
 
 
