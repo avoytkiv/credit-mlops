@@ -1,4 +1,9 @@
 defaults:
-  - dataset: 
-  - model: dbscan
-  - featurizer: pca
+  - main_config.yaml
+  - featurize: pca
+  - train/model: dbscan
+  - reports:
+      
+
+
+      
