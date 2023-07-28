@@ -10,4 +10,3 @@ hyperparameters:
   loss: "mean_squared_error" # "mean_squared_error", "binary_crossentropy"
   epochs: 100
   batch_size: 16
-  validation_split: 0.2
