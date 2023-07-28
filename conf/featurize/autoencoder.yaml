@@ -1,3 +1,4 @@
+featurizer_name: "autoencoder"
 autoencoder_parameters:
   encoding_dim: 10  # Dimensionality of the latent space representation
 
