@@ -1,7 +1,6 @@
 from sklearn.cluster import KMeans, AgglomerativeClustering, DBSCAN
 from hdbscan import HDBSCAN
-from sklearn.metrics import silhouette_score, make_scorer
-from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import silhouette_score
 from typing import Dict, Text
 from itertools import product
 import pandas as pd
@@ -73,4 +72,4 @@ def cluster(
     # Add an attribute to the model to store the best score
     best_model.best_score_ = best_score
 
-    return best_model
+    return best_model, labels
