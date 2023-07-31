@@ -1,40 +1,42 @@
 base:
   random_state: 42
   log_level: INFO
-
-data_load:
-  dataset_csv: data/raw/Customer_Data.csv
-
-data_preprocessing:
-  dataset_processed: data/processed/processed_data.csv
-
-featurize:
-  features_path: data/processed/featurized_data.csv
-  model_path: models/featurizer.pkl
-  n_components: 6
-
-train:
-  cv: 5
-  estimator_name: kmeans
-  estimators:
-    kmeans:
-      param_grid:
-        n_clusters: [2, 3, 4]
-        n_init: [10]
-    agglo:
-      param_grid:
-        n_clusters: [2, 3, 4]
-        linkage: ["ward", "complete", "average"]
-    dbscan:
-      param_grid:
-        eps: [0.3, 0.5]
-        min_samples: [5, 10]
-
-  model_path: models/model.pkl
-
+data:
+  data_load: data/raw/Customer_Data.csv
+  data_preprocessing: data/processed/processed_data.csv
+  data_featurized: data/processed/featurized_data.csv
 reports:
-  reports_dir: reports
-  plots_dir: reports/figures
+  base_dir: reports
+  plots_dir: figures
   metrics_file: metrics.json
-  silhouette_plot: silhouette_plot.png
-  elbow_plot: elbow_plot.png
+  plots:
+    silhouette: silhouette_plot.png
+    elbow: elbow_plot.png
+    clusters: clusters.png
+train:
+  model_path: models/model.pkl
+  model:
+    model_name: hdbscan
+    param_grid:
+      min_cluster_size:
+      - 5
+      - 10
+      min_samples:
+      - 5
+      - 10
+      cluster_selection_epsilon:
+      - 0.3
+      - 0.5
+featurize:
+  featurizer_name: autoencoder
+  featurizer_path: models/featurizer.h5
+  parameters:
+    encoding_dim: 10
+  hyperparameters:
+    encoder_activation: tanh
+    decoder_activation: relu
+    optimizer: adam
+    loss: mean_squared_error
+    epochs: 100
+    batch_size: 16
+    validation_split: 0.2
