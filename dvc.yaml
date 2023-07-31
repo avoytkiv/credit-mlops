@@ -5,9 +5,9 @@ stages:
     - src/stages/preprocessing.py
     params:
     - base
-    - data_load
+    - data.data_load
     outs:
-    - data/processed/processed_data.csv
+    - ${data.data_preprocessing}
   
   featurize:
     cmd: python src/stages/featurizing.py --config=params.yaml
@@ -15,40 +15,26 @@ stages:
     - data/processed/processed_data.csv
     - src/stages/featurizing.py
     params:
-    - data_preprocessing
+    - data.data_preprocessing
     - featurize
     outs:
-    - data/processed/featurized_data.csv
-    - models/featurizer.pkl
+    - ${data.data_featurized}
+    - ${featurize.featurizer_path}
   
   train:
     cmd: python src/stages/training.py --config=params.yaml
     deps:
-    - data/processed/featurized_data.csv
+    - ${data.data_featurized}
     - src/stages/training.py
     - src/utils/train_util.py
     params:
     - base
-    - featurize
     - train
     outs:
-    - models/model.pkl
+    - ${train.model_path}
     metrics:
     - reports/metrics.json:
         cache: false
-
-  visualize:
-    cmd: python src/stages/visualizing.py --config=params.yaml
-    deps:
-    - data/processed/processed_data.csv
-    - models/model.pkl
-    - models/featurizer.pkl
-    - src/stages/visualizing.py
-    - src/utils/visualize_util.py
-    params:
-    - base
-    - data_preprocessing
-    - reports
     plots:
     - reports/figures/clusters.png:
         cache: false
