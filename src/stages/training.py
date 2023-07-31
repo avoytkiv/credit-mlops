@@ -49,6 +49,10 @@ def train_model() -> None:
     json.dump(report, open(metrics_path, "w"))
     logger.info("Metrics saved")
 
+    # Append cluster labels to featurized dataset and save
+    train_df["cluster"] = labels
+    train_df.to_csv(Path(config["data"]["data_labeled"]), index=False)
+
     logger.info("Plot clusters")
     # Create a scatter plot of the featurized data with different colors for each cluster
     plt.figure(figsize=(8, 6))
