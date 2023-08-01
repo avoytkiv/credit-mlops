@@ -36,6 +36,19 @@ stages:
     metrics:
     - reports/metrics.json:
         cache: false
+  
+  visualize:
+    cmd: python src/stages/visualization.py --config=params.yaml
+    deps:
+    - ${data.data_preprocessing}
+    - ${data.data_labeled}
+    - src/stages/visualization.py
+    params:
+    - reports
     plots:
-    - reports/figures/clusters.png:
+    - ${reports.base_dir}/${reports.plots_dir}/${reports.plots.clusters}:
+        cache: false
+    - ${reports.base_dir}/${reports.plots_dir}/${reports.plots.comparison}:
+        cache: false
+    - ${reports.base_dir}/${reports.plots_dir}/${reports.plots.frequency}:
         cache: false

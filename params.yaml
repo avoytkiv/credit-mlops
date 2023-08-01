@@ -5,6 +5,7 @@ data:
   data_load: data/raw/Customer_Data.csv
   data_preprocessing: data/processed/processed_data.csv
   data_featurized: data/processed/featurized_data.csv
+  data_labeled: data/processed/labeled_data.csv
 reports:
   base_dir: reports
   plots_dir: figures
@@ -13,6 +14,8 @@ reports:
     silhouette: silhouette_plot.png
     elbow: elbow_plot.png
     clusters: clusters.png
+    comparison: comparison.png
+    frequency: frequency.png
 train:
   model_path: models/model.pkl
   model:
@@ -39,4 +42,3 @@ featurize:
     loss: mean_squared_error
     epochs: 100
     batch_size: 16
-    validation_split: 0.2
