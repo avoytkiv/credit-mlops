@@ -16,3 +16,5 @@ reports:
     silhouette: silhouette_plot.png
     elbow: elbow_plot.png
     clusters: clusters.png
+    comparison: comparison.png
+    frequency: frequency.png

@@ -27,8 +27,8 @@ stages:
       size: 786359
     - path: src/stages/featurizing.py
       hash: md5
-      md5: 5d6796e789e312336072c8f0406a02b4
-      size: 4125
+      md5: d14d1d23115e35367ca35bf80006c878
+      size: 4276
     params:
       params.yaml:
         data.data_preprocessing: data/processed/processed_data.csv
@@ -44,31 +44,30 @@ stages:
             loss: mean_squared_error
             epochs: 100
             batch_size: 16
-            validation_split: 0.2
     outs:
     - path: data/processed/featurized_data.csv
       hash: md5
-      md5: 4420c3fd988f5eea944eabf40162268c
-      size: 839918
+      md5: fa552ea7a911e472a08ff051e6d8da3a
+      size: 835117
     - path: models/featurizer.h5
       hash: md5
-      md5: 1f5a2e89ea75cb6ddd19b317e16fe5d9
+      md5: dfc6be29066d0d32175be7b05de1fd42
       size: 31136
   train:
     cmd: python src/stages/training.py --config=params.yaml
     deps:
     - path: data/processed/featurized_data.csv
       hash: md5
-      md5: 4420c3fd988f5eea944eabf40162268c
-      size: 839918
+      md5: fa552ea7a911e472a08ff051e6d8da3a
+      size: 835117
     - path: src/stages/training.py
       hash: md5
-      md5: 8be1be4616d1b3bff321eae8106615e6
-      size: 2057
+      md5: c4775ef76fedeadc6b1152cb5506ecdc
+      size: 1597
     - path: src/utils/train_util.py
       hash: md5
-      md5: 33e71c456f447efaae652f74fc1b7ccf
-      size: 2198
+      md5: e36d8c2a040e865e9f1f08d196dacba4
+      size: 2347
     params:
       params.yaml:
         base:
@@ -89,56 +88,55 @@ stages:
               - 0.3
               - 0.5
     outs:
+    - path: data/processed/labeled_data.csv
+      hash: md5
+      md5: 266eba7727da5cf01355e786e3086014
+      size: 853195
     - path: models/model.pkl
       hash: md5
-      md5: 979d39ee3345c120b38f3d03e88c3486
-      size: 1181645
-    - path: reports/figures/clusters.png
-      hash: md5
-      md5: a53ea3c9954efafc1661beae9124cf95
-      size: 225506
+      md5: 118a6082913da4456890e7c42ee3ecfd
+      size: 1178765
     - path: reports/metrics.json
       hash: md5
-      md5: 1af1622a2d7c2e658545468507235b0b
-      size: 42
+      md5: a640c85508521817d6fc6f8dc058c168
+      size: 43
   visualize:
-    cmd: python src/stages/visualizing.py --config=params.yaml
+    cmd: python src/stages/visualization.py --config=params.yaml
     deps:
+    - path: data/processed/labeled_data.csv
+      hash: md5
+      md5: 266eba7727da5cf01355e786e3086014
+      size: 853195
     - path: data/processed/processed_data.csv
       hash: md5
       md5: 8aff64ed9940f4339131242b798291d5
       size: 786359
-    - path: models/featurizer.pkl
+    - path: src/stages/visualization.py
       hash: md5
-      md5: 84820e6ebd2814e8bd2b4f28f7107479
-      size: 2029
-    - path: models/model.pkl
-      hash: md5
-      md5: ed0d857ea862a72b1ab312b83fa1fcbd
-      size: 30288
-    - path: src/stages/visualizing.py
-      hash: md5
-      md5: c6400af1746f690e0b813a8c91881050
-      size: 1546
-    - path: src/utils/visualize_util.py
-      hash: md5
-      md5: 4f34ab90ff70386ed43addb820aab79a
-      size: 2414
+      md5: 6d0ce271e36a7611d0fed15eb12a3cf1
+      size: 4026
     params:
       params.yaml:
-        base:
-          random_state: 42
-          log_level: INFO
-        data_preprocessing:
-          dataset_processed: data/processed/processed_data.csv
         reports:
-          reports_dir: reports
-          plots_dir: reports/figures
+          base_dir: reports
+          plots_dir: figures
           metrics_file: metrics.json
-          silhouette_plot: silhouette_plot.png
-          elbow_plot: elbow_plot.png
+          plots:
+            silhouette: silhouette_plot.png
+            elbow: elbow_plot.png
+            clusters: clusters.png
+            comparison: comparison.png
+            frequency: frequency.png
     outs:
     - path: reports/figures/clusters.png
       hash: md5
-      md5: fb694a36fb1c4d9eae05af826502ca30
-      size: 53334
+      md5: ecd2bb93d33d040ccce039fd88c2756d
+      size: 187729
+    - path: reports/figures/comparison.png
+      hash: md5
+      md5: a17df530f89cee3c284eb4a53b429820
+      size: 107956
+    - path: reports/figures/frequency.png
+      hash: md5
+      md5: a624451b8ab195c255c24e9fb397d499
+      size: 21255
