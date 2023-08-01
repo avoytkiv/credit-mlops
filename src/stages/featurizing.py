@@ -1,8 +1,10 @@
 import sys
 from pathlib import Path
 import pandas as pd
+import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+import tensorflow as tf
 from tensorflow.keras.layers import Input, Dense
 from tensorflow.keras.models import Model
 from tensorflow.keras.callbacks import EarlyStopping
@@ -45,6 +47,9 @@ def featurizing() -> None:
         pd.DataFrame(data_pca).to_csv(Path(config["data"]["data_featurized"]), index=False)
     
     elif featurizer_name == "autoencoder":
+        seed = config["base"]["random_state"]
+        tf.random.set_seed(seed)
+        np.random.seed(seed)
         # Define the number of features
         input_dim = data_standardized.shape[1]
         encoding_dim = config["featurize"]["parameters"]["encoding_dim"]
