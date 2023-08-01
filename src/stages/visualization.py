@@ -1,6 +1,7 @@
-import pandas as pd
-from pathlib import Path
 import sys
+from pathlib import Path
+import pandas as pd
+from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 import seaborn as sns
 import dvc.api
@@ -21,15 +22,21 @@ def visualize():
     labeled_df = pd.read_csv(config["data"]["data_labeled"])
     processed_df = pd.read_csv(config["data"]["data_preprocessing"])
 
+    logger.info("Initialize t-SNE")
+    tsne = TSNE(n_components=2, random_state=config["base"]["random_state"])
+    # Fit t-SNE on the labeled data except the labels
+    tsne_df = tsne.fit_transform(labeled_df.iloc[:, :-1].values)
+    # Add the labels to the t-SNE output
+    tsne_df = pd.DataFrame(tsne_df, columns=["Component 1", "Component 2"])
+    tsne_df["cluster"] = labeled_df["cluster"]
+
     logger.info("Plot clusters")
     logger.info("PLOT1: Create a clusters plot")
     # Create a scatter plot of the featurized data with different colors for each cluster
     plt.figure(figsize=(8, 6))
-    sns.scatterplot(x=labeled_df.iloc[:, 0], y=labeled_df.iloc[:, 1], hue=labeled_df["cluster"], palette="viridis")
+    grid = sns.FacetGrid(tsne_df, hue="cluster", height=8)
+    grid.map(plt.scatter, 'Component 1', 'Component 2').add_legend()
     plt.title(f"Clusters for {model_name}")
-    plt.xlabel("Component 1")
-    plt.ylabel("Component 2")
-    plt.legend(title='Cluster Label', loc='upper right')
     plt.show()
 
     plt.savefig(Path(config["reports"]["base_dir"]) / 
