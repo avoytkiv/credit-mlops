@@ -4,6 +4,7 @@ from sklearn.metrics import silhouette_score
 from typing import Dict, Text
 from itertools import product
 import pandas as pd
+import dvc.api
 
 class UnsupportedClusterer(Exception):
     def __init__(self, model_name):
@@ -36,6 +37,8 @@ def cluster(
     Returns:
         fitted clusterer
     """
+    config = dvc.api.params_show()
+
     clusterers = get_supported_clusterer()
 
     if model_name not in clusterers.keys():
@@ -56,19 +59,19 @@ def cluster(
     for params in all_params:
         # Create dict of parameters
         param_dict = dict(zip(param_names, params))
-
+        # Set random seed for KMeans
+        seed = config["base"]["random_state"]
+        if model_name == "kmeans":
+            param_dict['random_state'] = seed
         # Initialize and fit model
         model = clusterer_class(**param_dict)
         labels = model.fit_predict(X_train)
-
         # Compute silhouette score
         score = silhouette_score(X_train, labels)
-
         # If this model is better than the previous best, update best_score and best_model
         if score > best_score:
             best_score = score
             best_model = model
-
     # Add an attribute to the model to store the best score
     best_model.best_score_ = best_score
 
