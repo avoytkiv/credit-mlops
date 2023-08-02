@@ -9,9 +9,7 @@ stages:
       size: 1297
     params:
       params.yaml:
-        base:
-          random_state: 42
-          log_level: INFO
+        base.log_level: INFO
         data.data_load: data/raw/Customer_Data.csv
     outs:
     - path: data/processed/processed_data.csv
@@ -27,39 +25,44 @@ stages:
       size: 786359
     - path: src/stages/featurizing.py
       hash: md5
-      md5: d14d1d23115e35367ca35bf80006c878
-      size: 4276
+      md5: e4613ca80904e358ecbafa89c38aba61
+      size: 7328
     params:
       params.yaml:
+        base:
+          random_state: 42
+          log_level: INFO
         data.data_preprocessing: data/processed/processed_data.csv
         featurize:
           featurizer_name: autoencoder
-          featurizer_path: models/featurizer.h5
+          featurizer_path: models/featurizer.keras
+          model_name: model1
+          model_path: models/autoencoder/
           parameters:
             encoding_dim: 10
           hyperparameters:
             encoder_activation: tanh
             decoder_activation: relu
-            optimizer: adam
+            optimizer: sgd
             loss: mean_squared_error
             epochs: 100
             batch_size: 16
     outs:
     - path: data/processed/featurized_data.csv
       hash: md5
-      md5: fa552ea7a911e472a08ff051e6d8da3a
-      size: 835117
-    - path: models/featurizer.h5
+      md5: 616fd0b41c690c7049601fbd214aed73
+      size: 681410
+    - path: models/featurizer.keras
       hash: md5
-      md5: dfc6be29066d0d32175be7b05de1fd42
-      size: 31136
+      md5: 9c08fd4f13b69090182e33412bad1465
+      size: 9265549
   train:
     cmd: python src/stages/training.py --config=params.yaml
     deps:
     - path: data/processed/featurized_data.csv
       hash: md5
-      md5: fa552ea7a911e472a08ff051e6d8da3a
-      size: 835117
+      md5: 616fd0b41c690c7049601fbd214aed73
+      size: 681410
     - path: src/stages/training.py
       hash: md5
       md5: c4775ef76fedeadc6b1152cb5506ecdc
@@ -76,37 +79,34 @@ stages:
         train:
           model_path: models/model.pkl
           model:
-            model_name: hdbscan
+            model_name: dbscan
             param_grid:
-              min_cluster_size:
-              - 5
-              - 10
+              eps:
+              - 0.3
+              - 0.5
               min_samples:
               - 5
               - 10
-              cluster_selection_epsilon:
-              - 0.3
-              - 0.5
     outs:
     - path: data/processed/labeled_data.csv
       hash: md5
-      md5: 266eba7727da5cf01355e786e3086014
-      size: 853195
+      md5: f5c5eb1d48f606c5272c735ce07dc4d0
+      size: 701876
     - path: models/model.pkl
       hash: md5
-      md5: 118a6082913da4456890e7c42ee3ecfd
-      size: 1178765
+      md5: 3eedd207c0f4d750c612dd039790caf6
+      size: 158841
     - path: reports/metrics.json
       hash: md5
-      md5: a640c85508521817d6fc6f8dc058c168
-      size: 43
+      md5: 0bc3bae01d518cf2f2658eaf405c27c9
+      size: 44
   visualize:
     cmd: python src/stages/visualization.py --config=params.yaml
     deps:
     - path: data/processed/labeled_data.csv
       hash: md5
-      md5: 266eba7727da5cf01355e786e3086014
-      size: 853195
+      md5: f5c5eb1d48f606c5272c735ce07dc4d0
+      size: 701876
     - path: data/processed/processed_data.csv
       hash: md5
       md5: 8aff64ed9940f4339131242b798291d5
@@ -130,13 +130,13 @@ stages:
     outs:
     - path: reports/figures/clusters.png
       hash: md5
-      md5: ecd2bb93d33d040ccce039fd88c2756d
-      size: 187729
+      md5: 0cb4e6539a2226b08858b885cc3f7d6c
+      size: 155804
     - path: reports/figures/comparison.png
       hash: md5
-      md5: a17df530f89cee3c284eb4a53b429820
-      size: 107956
+      md5: ec825265238126edae4da1f86ad88140
+      size: 116746
     - path: reports/figures/frequency.png
       hash: md5
-      md5: a624451b8ab195c255c24e9fb397d499
-      size: 21255
+      md5: d964bd8285e287474cf3a7665e92a766
+      size: 21079

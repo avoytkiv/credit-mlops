@@ -19,26 +19,25 @@ reports:
 train:
   model_path: models/model.pkl
   model:
-    model_name: hdbscan
+    model_name: dbscan
     param_grid:
-      min_cluster_size:
-      - 5
-      - 10
+      eps:
+      - 0.3
+      - 0.5
       min_samples:
       - 5
       - 10
-      cluster_selection_epsilon:
-      - 0.3
-      - 0.5
 featurize:
   featurizer_name: autoencoder
-  featurizer_path: models/featurizer.h5
+  featurizer_path: models/featurizer.keras
+  model_name: model1
+  model_path: models/autoencoder/
   parameters:
     encoding_dim: 10
   hyperparameters:
     encoder_activation: tanh
     decoder_activation: relu
-    optimizer: adam
+    optimizer: sgd
     loss: mean_squared_error
     epochs: 100
     batch_size: 16
