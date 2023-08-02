@@ -1,5 +1,5 @@
 model_name: hdbscan
 param_grid:
-  min_cluster_size: [5, 10]
-  min_samples: [5, 10]
+  min_cluster_size: [20, 30]
+  min_samples: [10, 20]
   cluster_selection_epsilon: [0.3, 0.5]
