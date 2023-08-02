@@ -1,5 +1,7 @@
 featurizer_name: "autoencoder"
-featurizer_path: models/featurizer.h5
+featurizer_path: models/featurizer.keras
+model_name: model1
+model_path: models/autoencoder/
 parameters:
   encoding_dim: 10  # Dimensionality of the latent space representation
 
