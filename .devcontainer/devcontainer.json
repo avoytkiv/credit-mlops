@@ -13,6 +13,7 @@
 	},
 	"features": {
 		// "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/devcontainers/features/nvidia-cuda:1": {"installCudnn": true},
 		"ghcr.io/devcontainers/features/git:1": {},
 		"ghcr.io/iterative/features/dvc:1": {"version": "3.0.0"},
 		"ghcr.io/devcontainers-contrib/features/cookiecutter:2": {}

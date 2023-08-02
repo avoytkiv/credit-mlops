@@ -1,3 +1,4 @@
 /model.pkl
 /featurizer.pkl
 /featurizer.h5
+/featurizer.keras
