@@ -4,7 +4,7 @@ stages:
     deps:
     - src/stages/preprocessing.py
     params:
-    - base
+    - base.log_level
     - data.data_load
     outs:
     - ${data.data_preprocessing}
@@ -12,9 +12,10 @@ stages:
   featurize:
     cmd: python src/stages/featurizing.py --config=params.yaml
     deps:
-    - data/processed/processed_data.csv
+    - ${data.data_preprocessing}
     - src/stages/featurizing.py
     params:
+    - base
     - data.data_preprocessing
     - featurize
     outs:
