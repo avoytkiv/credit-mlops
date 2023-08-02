@@ -8,7 +8,6 @@ import tensorflow as tf
 from tensorflow.keras.layers import Input, Dense
 from tensorflow.keras.models import Model, model_from_json
 from tensorflow.keras.callbacks import EarlyStopping
-from tensorflow.keras import regularizers
 from tensorflow.keras.utils import plot_model
 import joblib
 import dvc.api
@@ -33,10 +32,16 @@ def make_model(logger, model_path, data_standardized, encoding_dim, encoder_acti
     input_layer = Input(shape=(input_dim,))
 
     logger.info("Define the encoder layer")
-    encoder_layer = Dense(encoding_dim, activation=encoder_activation, activity_regularizer=regularizers.l1(10e-5))(input_layer)
+    x = Dense(7, activation='relu')(input_layer)
+    x = Dense(500, activation='relu', kernel_initializer='glorot_uniform')(x)
+    x = Dense(500, activation='relu', kernel_initializer='glorot_uniform')(x)
+    x = Dense(2000, activation='relu', kernel_initializer='glorot_uniform')(x)
+    encoder_layer = Dense(encoding_dim, activation='relu', kernel_initializer='glorot_uniform', name='encoder')(x)
 
     logger.info("Define the decoder layer")
-    decoder_layer = Dense(input_dim, activation=decoder_activation)(encoder_layer)
+    x = Dense(2000, activation='relu', kernel_initializer='glorot_uniform')(encoder_layer)
+    x = Dense(500, activation='relu', kernel_initializer='glorot_uniform')(x)
+    decoder_layer = Dense(17, kernel_initializer='glorot_uniform')(x)
 
     logger.info("Define the autoencoder model")
     autoencoder = Model(inputs=input_layer, outputs=decoder_layer)
@@ -62,8 +67,6 @@ def save_model(autoencoder, model_path):
     """
     # Define the model path
     model_path = Path(model_path)
-    # Create the directory if it does not exist
-    model_path.mkdir(parents=True, exist_ok=True)
     # Save the model architecture and weights
     model_json = autoencoder.to_json()
     with open(model_path / 'architecture.json', "w") as json_file:
@@ -93,7 +96,7 @@ def apply_model(logger, model_path, autoencoder, data_standardized, encoding_dim
     Apply the autoencoder model to the data and save the reduced dataset.
     """
     logger.info("Define the encoder model")
-    encoder_model = Model(inputs=autoencoder.input, outputs=autoencoder.get_layer(index=1).output)
+    encoder_model = Model(inputs=autoencoder.input, outputs=autoencoder.get_layer('encoder').output) # autoencoder.get_layer('encoder_layer').output
 
     logger.info("Plot the encoder model")
     plot_model(encoder_model, model_path / 'encoder.png', show_shapes=True, show_layer_names=True)
@@ -101,7 +104,7 @@ def apply_model(logger, model_path, autoencoder, data_standardized, encoding_dim
     logger.info("Get the reduced data using the encoder")
     reduced_data = encoder_model.predict(data_standardized)
     
-    logger.info("Convert the reduced data to a DataFrame")
+    logger.info(f"Convert the reduced data to a DataFrame with {encoding_dim} columns")
     reduced_df = pd.DataFrame(reduced_data, columns=[f"latent_{i+1}" for i in range(encoding_dim)])
     
     logger.info("Save the reduced dataset to a CSV file")
@@ -113,9 +116,10 @@ def featurizing() -> None:
     Load processed data. Apply PCA to reduce the dimensions of the dataset.
     """
     config = dvc.api.params_show()
+    
 
     logger = get_logger("FEATURIZE", log_level=config["base"]["log_level"])
-
+    logger.info("Start featurizing")
     featurizer_path = config["featurize"]["featurizer_path"]
     data_featurized_path = config["data"]["data_featurized"]
     
@@ -141,10 +145,13 @@ def featurizing() -> None:
         pd.DataFrame(data_pca).to_csv(Path(data_featurized_path), index=False)
     
     elif featurizer_name == "autoencoder":
-        
         model_path = Path(config["featurize"]["model_path"]) / config["featurize"]["model_name"]
+        logger.info(f"Model path: {model_path}")
+        # Create the directory if it does not exist
+        model_path.mkdir(parents=True, exist_ok=True)
         seed = config["base"]["random_state"]
         encoding_dim = config["featurize"]["parameters"]["encoding_dim"]
+        logger.info(f"Encoding dimension: {encoding_dim}")
         encoder_activation = config["featurize"]["hyperparameters"]["encoder_activation"]
         decoder_activation = config["featurize"]["hyperparameters"]["decoder_activation"]
         optimizer = config["featurize"]["hyperparameters"]["optimizer"]
@@ -152,7 +159,7 @@ def featurizing() -> None:
         epochs = config["featurize"]["hyperparameters"]["epochs"]
         batch_size = config["featurize"]["hyperparameters"]["batch_size"]
 
-        # make_model(logger, model_path, data_standardized, encoding_dim, encoder_activation, decoder_activation, optimizer, loss, epochs, batch_size, seed)
+        make_model(logger, model_path, data_standardized, encoding_dim, encoder_activation, decoder_activation, optimizer, loss, epochs, batch_size, seed)
         autoencoder = load_model(logger, model_path, optimizer, loss)
         autoencoder.save(featurizer_path)
         apply_model(logger, model_path, autoencoder, data_standardized, encoding_dim, data_featurized_path)
