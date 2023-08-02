@@ -90,3 +90,6 @@ target/
 
 # hydra output dir
 outputs/
+
+# models/autoencoder
+models/autoencoder/
