@@ -3,4 +3,5 @@ defaults:
   - train/base.yaml
   - featurize: pca # autoencoder, pca
   - train/model: dbscan # agglo, kmeans, dbscan, hdbscan
+  - visualization: tsne
       
