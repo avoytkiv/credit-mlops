@@ -13,6 +13,12 @@ from src.utils.logs import get_logger  # noqa: E402
 
 def visualize():
     config = dvc.api.params_show()
+    n_components = config["visualization"]["n_components"]
+    random_state = config["base"]["random_state"]
+    perplexity = config["visualization"]["perplexity"]
+    learning_rate = config["visualization"]["learning_rate"]
+    n_iter = config["visualization"]["n_iter"]
+
 
     logger = get_logger("VISUALIZE", log_level=config["base"]["log_level"])
 
@@ -23,7 +29,8 @@ def visualize():
     processed_df = pd.read_csv(config["data"]["data_preprocessing"])
 
     logger.info("Initialize t-SNE")
-    tsne = TSNE(n_components=2, random_state=config["base"]["random_state"])
+    tsne = TSNE(n_components=n_components, random_state=random_state, 
+                perplexity=perplexity, learning_rate=learning_rate, n_iter=n_iter)
     # Fit t-SNE on the labeled data except the labels
     tsne_df = tsne.fit_transform(labeled_df.iloc[:, :-1].values)
     # Add the labels to the t-SNE output

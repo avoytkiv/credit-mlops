@@ -1,0 +1,4 @@
+n_components: 2 # 2-3
+perplexity: 90 # 5-50
+learning_rate: 1000 # 10-1000
+n_iter: 3000 # 250-5000
