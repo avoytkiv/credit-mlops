@@ -5,10 +5,10 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 import tensorflow as tf
-from tensorflow.keras.layers import Input, Dense
-from tensorflow.keras.models import Model, model_from_json
-from tensorflow.keras.callbacks import EarlyStopping
-from tensorflow.keras.utils import plot_model
+from keras.layers import Input, Dense
+from keras.models import Model, model_from_json
+from keras.callbacks import EarlyStopping
+from keras.utils import plot_model
 import joblib
 import dvc.api
 
@@ -21,6 +21,8 @@ def make_model(logger, model_path, data_standardized, encoding_dim, encoder_acti
     """
     Define the autoencoder model and train it.
     """
+    logger.info("GPU Available:", tf.config.list_physical_devices('GPU'))
+    
     logger.info("Define the random seed")
     tf.random.set_seed(seed)
     np.random.seed(seed)
