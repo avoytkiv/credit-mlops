@@ -5,6 +5,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 import tensorflow as tf
+from tensorflow import keras
 from keras.layers import Input, Dense
 from keras.models import Model, model_from_json
 from keras.callbacks import EarlyStopping
@@ -120,6 +121,11 @@ def featurizing() -> None:
     
 
     logger = get_logger("FEATURIZE", log_level=config["base"]["log_level"])
+    logger.info("Check the version of TensorFlow. Must include (GPU) ", tf.__version__)
+    logger.info("Check the TensorFlow backend used by Keras.\n" 
+                "If the output shows “tensorflow-gpu,” then Keras is using the GPU version of TensorFlow", 
+                keras.backend.backend())
+    
     logger.info("Start featurizing")
     featurizer_path = config["featurize"]["featurizer_path"]
     data_featurized_path = config["data"]["data_featurized"]
