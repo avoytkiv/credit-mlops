@@ -21,8 +21,7 @@ def make_model(logger, model_path, data_standardized, encoding_dim, encoder_acti
     """
     Define the autoencoder model and train it.
     """
-    logger.info("GPU Available:", tf.config.list_physical_devices('GPU'))
-    
+
     logger.info("Define the random seed")
     tf.random.set_seed(seed)
     np.random.seed(seed)
