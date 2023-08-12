@@ -1,9 +1,8 @@
 name: CML
 on:
-  workflow_dispatch: {}
   push:
-    branches:    
-      - 'expgpu*'
+    tags:    
+      - '*#gpu*'
     paths:
       - "data/**"
       - "src/**"
