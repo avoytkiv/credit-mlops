@@ -37,6 +37,8 @@ jobs:
             --cloud-type=g5.2xlarge \
             --cloud-hdd-size=40 \
             --idle-timeout=300 \
+            --cloud-aws-security-group=sg-014c819b09a7fc153\
+            --cloud-aws-subnet-id=subnet-0ddc400e2c7cc2565
   train-model:
     needs: deploy-runner
     runs-on: [ self-hosted, cml-gpu ]
