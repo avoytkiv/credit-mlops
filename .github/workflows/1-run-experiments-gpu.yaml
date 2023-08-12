@@ -87,8 +87,6 @@ jobs:
           -S 'tsne.perplexity=50' \
           -S 'tsne.learning_rate=1000' \
           -S 'tsne.n_iter=3000' 
-          # Push data
-          dvc push
           # Commit all changes and create a pull request
           cml pr create --squash --skip-ci .
       
