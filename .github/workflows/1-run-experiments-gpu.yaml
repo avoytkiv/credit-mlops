@@ -1,0 +1,102 @@
+name: CML
+on:
+  workflow_dispatch: {}
+  push:
+    branches:    
+      - 'expgpu*'
+    paths:
+      - "data/**"
+      - "src/**"
+      - "params.yaml"
+      - "dvc.*"
+jobs:
+  deploy-runner:
+    runs-on: ubuntu-latest
+    environment: cloud
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: iterative/setup-cml@v1
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-west-1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Create Runner
+        env:
+          REPO_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+        run: |
+          cml runner launch --single \
+            --labels=cml-gpu \
+            --cloud=aws \
+            --cloud-region=us-west-1 \
+            --cloud-type=g5.2xlarge \
+            --cloud-hdd-size=40 \
+            --idle-timeout=300 \
+  train-model:
+    needs: deploy-runner
+    runs-on: [ self-hosted, cml-gpu ]
+    timeout-minutes: 240
+    environment: cloud
+    container: 
+      image: iterativeai/cml:0-dvc2-base1-gpu
+      options: --gpus all
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-west-1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: cml setup
+        run: cml ci
+        env:
+          REPO_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+      - name: dvc-repro-cml
+        env:
+          REPO_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+        run: |
+          # Install dependencies
+          pip install -r requirements.txt
+          # Download data
+          dvc pull
+          # Run pipeline
+          dvc exp run --queue \
+          -S 'featurize=autoencoder' \
+          -S 'train/model=hdbscan,kmeans' \
+          -S 'visualization=tsne' \
+          -S 'featurize.parameters.encoding_dim=6,8,10' \
+          -S 'featurize.hyperparameters.epochs=50' \
+          -S 'featurize.hyperparameters.batch_size=16,64,128' \
+          -S 'featurize.hyperparameters.loss=adam,sgd' \
+          -S 'featurize.hyperparameters.loss=mean_squared_error,binary_crossentropy' 
+          -S 'tsne.perplexity=50' \
+          -S 'tsne.learning_rate=1000' \
+          -S 'tsne.n_iter=3000' 
+          # Push data
+          dvc push
+          # Commit all changes and create a pull request
+          cml pr create --squash --skip-ci .
+      
+      - name: create-report
+        env:
+          REPO_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+        run: |
+          ### CML report ###
+          echo '## Results of experiments' >> report.md
+          dvc exp show --md >> report.md
+          cml comment update --target=pr report.md 
