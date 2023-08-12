@@ -25,8 +25,8 @@ stages:
       size: 786359
     - path: src/stages/featurizing.py
       hash: md5
-      md5: e4613ca80904e358ecbafa89c38aba61
-      size: 7328
+      md5: 582685569a76dba203e0bb0f20d96bad
+      size: 7291
     params:
       params.yaml:
         base:
@@ -39,30 +39,30 @@ stages:
           model_name: model1
           model_path: models/autoencoder/
           parameters:
-            encoding_dim: 10
+            encoding_dim: 6
           hyperparameters:
             encoder_activation: tanh
             decoder_activation: relu
-            optimizer: sgd
-            loss: mean_squared_error
-            epochs: 100
+            optimizer: adam
+            loss: binary_crossentropy
+            epochs: 15
             batch_size: 16
     outs:
     - path: data/processed/featurized_data.csv
       hash: md5
-      md5: 616fd0b41c690c7049601fbd214aed73
-      size: 681410
+      md5: d16343cd37867be2c5378702daeffb3a
+      size: 208744
     - path: models/featurizer.keras
       hash: md5
-      md5: 9c08fd4f13b69090182e33412bad1465
-      size: 9265549
+      md5: 6a358cc742eaec687d082d66fc02e34a
+      size: 9201539
   train:
     cmd: python src/stages/training.py --config=params.yaml
     deps:
     - path: data/processed/featurized_data.csv
       hash: md5
-      md5: 616fd0b41c690c7049601fbd214aed73
-      size: 681410
+      md5: d16343cd37867be2c5378702daeffb3a
+      size: 208744
     - path: src/stages/training.py
       hash: md5
       md5: c4775ef76fedeadc6b1152cb5506ecdc
@@ -79,42 +79,44 @@ stages:
         train:
           model_path: models/model.pkl
           model:
-            model_name: dbscan
+            model_name: kmeans
             param_grid:
-              eps:
-              - 0.3
-              - 0.5
-              min_samples:
+              n_clusters:
+              - 2
+              - 3
+              - 4
               - 5
+              - 6
+              n_init:
               - 10
     outs:
     - path: data/processed/labeled_data.csv
       hash: md5
-      md5: f5c5eb1d48f606c5272c735ce07dc4d0
-      size: 701876
+      md5: 7dcaa78f05688096c2704acdc65f61d2
+      size: 223444
     - path: models/model.pkl
       hash: md5
-      md5: 3eedd207c0f4d750c612dd039790caf6
-      size: 158841
+      md5: ef80989342a0029be560b6d6fa32b8cc
+      size: 30240
     - path: reports/metrics.json
       hash: md5
-      md5: 0bc3bae01d518cf2f2658eaf405c27c9
-      size: 44
+      md5: 7a63d2ba31f77b909be1fb9e909ccd4b
+      size: 42
   visualize:
     cmd: python src/stages/visualization.py --config=params.yaml
     deps:
     - path: data/processed/labeled_data.csv
       hash: md5
-      md5: f5c5eb1d48f606c5272c735ce07dc4d0
-      size: 701876
+      md5: 7dcaa78f05688096c2704acdc65f61d2
+      size: 223444
     - path: data/processed/processed_data.csv
       hash: md5
       md5: 8aff64ed9940f4339131242b798291d5
       size: 786359
     - path: src/stages/visualization.py
       hash: md5
-      md5: 6d0ce271e36a7611d0fed15eb12a3cf1
-      size: 4026
+      md5: 4cf4e40adc8a7839aab106c79b5a7af6
+      size: 4376
     params:
       params.yaml:
         reports:
@@ -130,13 +132,13 @@ stages:
     outs:
     - path: reports/figures/clusters.png
       hash: md5
-      md5: 0cb4e6539a2226b08858b885cc3f7d6c
-      size: 155804
+      md5: 58a7485c6119d3a2919ffab77ac1b92a
+      size: 57284
     - path: reports/figures/comparison.png
       hash: md5
-      md5: ec825265238126edae4da1f86ad88140
-      size: 116746
+      md5: 19567525fb592dfa531fc40b8dcdd8f0
+      size: 131136
     - path: reports/figures/frequency.png
       hash: md5
-      md5: d964bd8285e287474cf3a7665e92a766
-      size: 21079
+      md5: 046c9b206faf719ddd742878eab6dfea
+      size: 21945

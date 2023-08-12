@@ -19,13 +19,15 @@ reports:
 train:
   model_path: models/model.pkl
   model:
-    model_name: dbscan
+    model_name: kmeans
     param_grid:
-      eps:
-      - 0.3
-      - 0.5
-      min_samples:
+      n_clusters:
+      - 2
+      - 3
+      - 4
       - 5
+      - 6
+      n_init:
       - 10
 featurize:
   featurizer_name: autoencoder
@@ -33,11 +35,16 @@ featurize:
   model_name: model1
   model_path: models/autoencoder/
   parameters:
-    encoding_dim: 10
+    encoding_dim: 6
   hyperparameters:
     encoder_activation: tanh
     decoder_activation: relu
-    optimizer: sgd
-    loss: mean_squared_error
-    epochs: 100
+    optimizer: adam
+    loss: binary_crossentropy
+    epochs: 15
     batch_size: 16
+visualization:
+  n_components: 2
+  perplexity: 90
+  learning_rate: 1000
+  n_iter: 3000
