@@ -40,8 +40,8 @@ def make_model(logger, model_path, data_standardized, encoding_dim, encoder_acti
     encoder_layer = Dense(encoding_dim, activation='relu', kernel_initializer='glorot_uniform', name='encoder')(x)
 
     logger.info("Define the decoder layer")
-    x = Dense(2000, activation='relu', kernel_initializer='glorot_uniform')(encoder_layer)
-    x = Dense(500, activation='relu', kernel_initializer='glorot_uniform')(x)
+    x = Dense(2000, activation='sigmoid', kernel_initializer='glorot_uniform')(encoder_layer)
+    x = Dense(500, activation='sigmoid', kernel_initializer='glorot_uniform')(x)
     decoder_layer = Dense(17, kernel_initializer='glorot_uniform')(x)
 
     logger.info("Define the autoencoder model")
