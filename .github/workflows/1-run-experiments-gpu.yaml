@@ -34,7 +34,7 @@ jobs:
             --labels=cml-gpu \
             --cloud=aws \
             --cloud-region=us-west-1 \
-            --cloud-type=g3.4xlarge \
+            --cloud-type=g2.2xlarge \
             --cloud-hdd-size=40 \
             --idle-timeout=300 
   train-model:
