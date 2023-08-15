@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 import pandas as pd
+import numpy as np
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -53,32 +54,57 @@ def visualize():
     logger.info("PLOT2: Create a visualization to compare the clusters")
     # Create a histogram of the clusters across selected features
     processed_df["cluster"] = labeled_df["cluster"]
-    # Select columns BALANCE, PURCHASES, CREDIT_LIMIT, PAYMENTS and labels
-    selected_columns = ["BALANCE", "PURCHASES", "CREDIT_LIMIT", "PAYMENTS"]
+    # Select columsn (short version) BALANCE, PURCHASES, CASH_ADVANCE, PURCHASES_FREQUENCY, CREDIT_LIMIT, MINIMUM_PAYMENTS
+    selected_columns = ['BALANCE', 'PURCHASES', 'CASH_ADVANCE', 'PURCHASES_FREQUENCY', 'CREDIT_LIMIT', 'MINIMUM_PAYMENTS']
     clusters = processed_df['cluster'].unique()
-    # create a pairplot
-    # Define the figure size and grid layout properties
-    figsize = (14, 10)
-    cols = 2  # Number of columns in the grid
-    rows = len(selected_columns) // cols  # Number of rows in the grid
 
-    # Create a new figure and a grid of subplots
-    fig, axes = plt.subplots(rows, cols, figsize=figsize)
+    # mean_df = processed_df.groupby('cluster')[selected_columns].mean()
+    # mean_df.to_csv("data/processed/mean_clusters.csv", index=False) 
 
-    # Flatten the axes array, in case we have only one row (or one column)
-    axes = axes.flatten()
+    # Convert numerical values to categorical labels based on percentiles
+    # binned_df = mean_df.copy()
+    # num_categories = 3
+    # for feature in mean_df.columns:
+    #     labels = pd.qcut(mean_df[feature], q=num_categories, labels=['LOW', 'MODERATE', 'HIGH'])
+    #     binned_df[feature] = labels
+    
+    # Define color map for labels
+    color_map = {
+        'LOW': 'background-color: rgba(255, 0, 0, 0.3)',
+        'MODERATE': 'background-color: rgba(255, 255, 0, 0.3)',
+        'HIGH': 'background-color: rgba(0, 255, 0, 0.3)'
+    }
+    # Apply colors to labels in the DataFrame
+    # styled_df = binned_df.transpose().style.applymap(lambda label: color_map[label])
 
-    # Loop through the selected columns and create a histogram/density plot for each one
-    for i, col in enumerate(selected_columns):
-        for cluster in clusters:
-            sns.histplot(processed_df[processed_df['cluster'] == cluster][col], 
-                        kde=True,  # This enables the density plot
-                        ax=axes[i],  # Plot on the i-th subplot
-                        label=f'Cluster {cluster}')  # Add a label for the legend
-        axes[i].set_title(col)  # Set the title to the column name
-        axes[i].legend()  # Show the legend on the i-th subplot
+    
+    # styled_df.to_html('styled_data.html', index=False)
+    # binned_df.to_csv("data/processed/binned_clusters.csv", index=False)
+    
+    num_features = len(selected_columns)
+    num_clusters = len(clusters)
 
-    # Show the plot
+    # Create a matrix of subplots
+    fig, axes = plt.subplots(nrows=num_features, ncols=num_clusters, figsize=(22, 4*num_features), sharex=False, sharey=False)
+
+    # Loop through each feature and cluster
+    for i, feature in enumerate(selected_columns):
+        for j, cluster in enumerate(clusters):
+            ax = axes[i, j]
+            cluster_data = processed_df[processed_df['cluster'] == cluster][feature]
+            ax.hist(cluster_data, bins=20, alpha=0.5, label=f'Cluster {cluster}')
+            
+            # Calculate and annotate the mean value
+            mean_value = np.mean(cluster_data)
+            ax.axvline(mean_value, color='r', linestyle='dashed', linewidth=1)
+            ax.annotate(f'Mean: {mean_value:.2f}', xy=(0.7, 0.8), xycoords='axes fraction', color='r')
+            
+            if j == 0:
+                ax.set_ylabel(feature)
+            if i == num_features - 1:
+                ax.set_xlabel('Frequency')
+            ax.legend()
+
     plt.tight_layout()
     plt.show()
 
