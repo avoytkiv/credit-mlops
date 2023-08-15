@@ -38,13 +38,13 @@ featurize:
     encoding_dim: 6
   hyperparameters:
     encoder_activation: tanh
-    decoder_activation: relu
+    decoder_activation: tanh
     optimizer: adam
     loss: binary_crossentropy
     epochs: 15
-    batch_size: 16
+    batch_size: 64
 visualization:
   n_components: 2
-  perplexity: 90
-  learning_rate: 1000
+  perplexity: 50
+  learning_rate: 500
   n_iter: 3000

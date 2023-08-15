@@ -25,8 +25,8 @@ stages:
       size: 786359
     - path: src/stages/featurizing.py
       hash: md5
-      md5: 582685569a76dba203e0bb0f20d96bad
-      size: 7291
+      md5: 9298aa15fa4d538b2e5dbf2eb8d86b57
+      size: 7752
     params:
       params.yaml:
         base:
@@ -42,27 +42,27 @@ stages:
             encoding_dim: 6
           hyperparameters:
             encoder_activation: tanh
-            decoder_activation: relu
+            decoder_activation: tanh
             optimizer: adam
             loss: binary_crossentropy
             epochs: 15
-            batch_size: 16
+            batch_size: 64
     outs:
     - path: data/processed/featurized_data.csv
       hash: md5
-      md5: d16343cd37867be2c5378702daeffb3a
-      size: 208744
+      md5: bea08531b57606b56524b72fc2273b1e
+      size: 283939
     - path: models/featurizer.keras
       hash: md5
-      md5: 6a358cc742eaec687d082d66fc02e34a
-      size: 9201539
+      md5: 6b887b954a03852867a07b38ffdb6cf7
+      size: 9201533
   train:
     cmd: python src/stages/training.py --config=params.yaml
     deps:
     - path: data/processed/featurized_data.csv
       hash: md5
-      md5: d16343cd37867be2c5378702daeffb3a
-      size: 208744
+      md5: bea08531b57606b56524b72fc2273b1e
+      size: 283939
     - path: src/stages/training.py
       hash: md5
       md5: c4775ef76fedeadc6b1152cb5506ecdc
@@ -92,31 +92,31 @@ stages:
     outs:
     - path: data/processed/labeled_data.csv
       hash: md5
-      md5: 7dcaa78f05688096c2704acdc65f61d2
-      size: 223444
+      md5: 83fd5feb15399d49a25a57b8dc8be520
+      size: 298639
     - path: models/model.pkl
       hash: md5
-      md5: ef80989342a0029be560b6d6fa32b8cc
+      md5: c738859129fe31b3974c700ef7ae5a18
       size: 30240
     - path: reports/metrics.json
       hash: md5
-      md5: 7a63d2ba31f77b909be1fb9e909ccd4b
+      md5: 7627af67409156a8ec9a766232a71ebb
       size: 42
   visualize:
     cmd: python src/stages/visualization.py --config=params.yaml
     deps:
     - path: data/processed/labeled_data.csv
       hash: md5
-      md5: 7dcaa78f05688096c2704acdc65f61d2
-      size: 223444
+      md5: 83fd5feb15399d49a25a57b8dc8be520
+      size: 298639
     - path: data/processed/processed_data.csv
       hash: md5
       md5: 8aff64ed9940f4339131242b798291d5
       size: 786359
     - path: src/stages/visualization.py
       hash: md5
-      md5: 4cf4e40adc8a7839aab106c79b5a7af6
-      size: 4376
+      md5: 9dd272a8cbe9369598b7b679f40c6038
+      size: 5462
     params:
       params.yaml:
         reports:
@@ -129,16 +129,21 @@ stages:
             clusters: clusters.png
             comparison: comparison.png
             frequency: frequency.png
+        visualization:
+          n_components: 2
+          perplexity: 50
+          learning_rate: 500
+          n_iter: 3000
     outs:
     - path: reports/figures/clusters.png
       hash: md5
-      md5: 58a7485c6119d3a2919ffab77ac1b92a
-      size: 57284
+      md5: c02067578d858053d9cfecb96187f1e5
+      size: 98901
     - path: reports/figures/comparison.png
       hash: md5
-      md5: 19567525fb592dfa531fc40b8dcdd8f0
-      size: 131136
+      md5: 767e2f6879af7c8d8dbc771d500645f4
+      size: 297970
     - path: reports/figures/frequency.png
       hash: md5
-      md5: 046c9b206faf719ddd742878eab6dfea
-      size: 21945
+      md5: 0fa48f4ee67f875d8c209c453bb8340e
+      size: 18447

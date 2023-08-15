@@ -46,7 +46,8 @@ stages:
     - src/stages/visualization.py
     params:
     - reports
-    frozen: true
+    - visualization
+    frozen: false
     plots:
     - ${reports.base_dir}/${reports.plots_dir}/${reports.plots.clusters}:
         cache: false
