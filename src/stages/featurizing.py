@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 import tensorflow as tf
@@ -33,15 +34,15 @@ def make_model(logger, model_path, data_standardized, encoding_dim, encoder_acti
     input_layer = Input(shape=(input_dim,))
 
     logger.info("Define the encoder layer")
-    x = Dense(7, activation='relu')(input_layer)
-    x = Dense(500, activation='relu', kernel_initializer='glorot_uniform')(x)
-    x = Dense(500, activation='relu', kernel_initializer='glorot_uniform')(x)
-    x = Dense(2000, activation='relu', kernel_initializer='glorot_uniform')(x)
+    x = Dense(7, activation=encoder_activation)(input_layer)
+    x = Dense(500, activation=encoder_activation, kernel_initializer='glorot_uniform')(x)
+    x = Dense(500, activation=encoder_activation, kernel_initializer='glorot_uniform')(x)
+    x = Dense(2000, activation=encoder_activation, kernel_initializer='glorot_uniform')(x)
     encoder_layer = Dense(encoding_dim, activation='relu', kernel_initializer='glorot_uniform', name='encoder')(x)
 
     logger.info("Define the decoder layer")
-    x = Dense(2000, activation='sigmoid', kernel_initializer='glorot_uniform')(encoder_layer)
-    x = Dense(500, activation='sigmoid', kernel_initializer='glorot_uniform')(x)
+    x = Dense(2000, activation=decoder_activation, kernel_initializer='glorot_uniform')(encoder_layer)
+    x = Dense(500, activation=decoder_activation, kernel_initializer='glorot_uniform')(x)
     decoder_layer = Dense(17, kernel_initializer='glorot_uniform')(x)
 
     logger.info("Define the autoencoder model")
@@ -54,7 +55,17 @@ def make_model(logger, model_path, data_standardized, encoding_dim, encoder_acti
     early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.0001, patience=5, verbose=1, mode='min', restore_best_weights=True)
 
     logger.info("Train the autoencoder model")
-    autoencoder.fit(data_standardized, data_standardized, epochs=epochs, batch_size=batch_size, shuffle=True, validation_split=0.2, verbose=1, callbacks=[early_stopping])
+    history = autoencoder.fit(data_standardized, data_standardized, epochs=epochs, batch_size=batch_size, shuffle=True, validation_split=0.2, verbose=1, callbacks=[early_stopping])
+
+    logger.info("Plot the training and validation loss")
+    plt.plot(history.history['loss'], label='Training Loss')
+    plt.plot(history.history['val_loss'], label='Validation Loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.title('Training and Validation Loss')
+    plt.legend()
+    plt.show()
+    plt.savefig(model_path / 'loss.png')
 
     logger.info("Plot the encoder model")
     plot_model(autoencoder, model_path / 'autoencoder.png', show_shapes=True, show_layer_names=True)
