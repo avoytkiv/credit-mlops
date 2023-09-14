@@ -4,6 +4,8 @@ A brief description of what this project does and who it's for
 
 ## ML Pipeline Architecture
 
+<img width="1607" alt="pipeline graph" src="https://github.com/avoytkiv/credit-mlops/assets/74664634/eca6b531-269d-4d03-a946-fd0b3fa4b431">
+
 ## Demo
 
 ### Running ML experiments
