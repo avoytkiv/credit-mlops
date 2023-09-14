@@ -100,11 +100,11 @@ From here start consulting with the business team.
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your repo secrets (Go to repo --> Settings --> Secrets and Variables --> Actions):
-`AWS_ACCESS_KEY_ID` - to run experiments on more powerful cloud instance; 
-`AWS_SECRET_ACCESS_KEY` - see above;
-`HEROKU_API_KEY` - to deploy app;
-`TOKEN_GITHUB` - to give permission for Github workflows.
+To run this project, you will need to add the following environment variables to your repo secrets (Go to repo --> Settings --> Secrets and Variables --> Actions):   
+`AWS_ACCESS_KEY_ID` - to run experiments on more powerful cloud instance;    
+`AWS_SECRET_ACCESS_KEY` - see above;   
+`HEROKU_API_KEY` - to deploy app;   
+`TOKEN_GITHUB` - to give permission for Github workflows.   
 
 
 ## TODO
