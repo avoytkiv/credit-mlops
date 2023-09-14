@@ -4,15 +4,16 @@
 
 Understand clients’ behaviour having more than hundred of features and millions of records. Why? For targeted marketing. 
 
-<img width="834" alt="Screenshot 2023-09-13 at 21 48 08" src="https://github.com/avoytkiv/credit-mlops/assets/74664634/e38b76b4-2feb-4242-a9c7-1a4f5ea733da">
+<img width="834" alt="Screenshot 2023-09-13 at 21 48 08" src="https://github.com/avoytkiv/credit-mlops/assets/74664634/e38b76b4-2feb-4242-a9c7-1a4f5ea733da">   
+
 
 Why MLOps?
 
 Challenges with ML projects:
 
-**Data Management**: data changes frequently, it impacts analysis, managing versions of datasets is a pain.
-**Experiments management**: different versions of data, code and parameteres make it impossible to track experiments in a consistent and reliable way.
-**Deployment management**: different environments might require different dependencies and configurations.
+**Data Management**: data changes frequently, it impacts analysis, managing versions of datasets is a pain.   
+**Experiments management**: different versions of data, code and parameteres make it impossible to track experiments in a consistent and reliable way.   
+**Deployment management**: different environments might require different dependencies and configurations.   
 
 
 ## ML Pipeline Architecture
