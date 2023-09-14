@@ -55,7 +55,32 @@ The output of this command is a table that lists all the experiments (DVC Plugin
 
 ### Continuous Integration
 
+With the best experiment in mind, we: 
+- trigger a workflow from the command line (CLI) or DVC Studio on experiments branch by pushing changes to remote 
+- which in turn will invoke a workflow job (with the help of GitHub Actions), in our case two jobs:
+  - deploy cloud runner (AWS EC2 instance),install all dependencies
+  - run training 
+- that will result in a report pushed back into Git and published as PR (Pull Request) comment including metrics, plots. 
+- After reviewing and approving this PR, the new model will be in the production branch
+
+<img width="1154" alt="Screenshot 2023-09-13 at 21 07 57" src="https://github.com/avoytkiv/credit-mlops/assets/74664634/08168b7f-75d4-4ce5-a8b4-412eb948bcc7">
+
+
 ### Continuous Deployment
+
+From here, we can trigger another workflow by pushing a predefined tag. Finally, it will deploy our model to the Heroku platform so anyone with access can use it for prediction.
+
+## Interpreting results
+
+Compare selected features across our clusters. Though the plot below is unreadable, its purpose is to give a general idea of how to start thinking about the problem. 
+
+![comparison](https://github.com/avoytkiv/credit-mlops/assets/74664634/69eef1b7-7d09-48d3-977f-c985eaae5c7a)
+
+Summarizing data grouped by clusters across selected features.
+
+<img width="1158" alt="Screenshot 2023-09-13 at 21 15 18" src="https://github.com/avoytkiv/credit-mlops/assets/74664634/0d54eedf-5a26-4507-beec-20d09f540798">
+
+From here start consulting with the business team. 
 
 ## Environment Variables
 
