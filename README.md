@@ -1,6 +1,19 @@
-# Project Title
+# Customers segmentation: MLOps approach
 
-A brief description of what this project does and who it's for
+## Problem
+
+Understand clients’ behaviour having more than hundred of features and millions of records. Why? For targeted marketing. 
+
+<img width="834" alt="Screenshot 2023-09-13 at 21 48 08" src="https://github.com/avoytkiv/credit-mlops/assets/74664634/e38b76b4-2feb-4242-a9c7-1a4f5ea733da">
+
+Why MLOps?
+
+Challenges with ML projects:
+
+**Data Management**: data changes frequently, it impacts analysis, managing versions of datasets is a pain.
+**Experiments management**: different versions of data, code and parameteres make it impossible to track experiments in a consistent and reliable way.
+**Deployment management**: different environments might require different dependencies and configurations.
+
 
 ## ML Pipeline Architecture
 
@@ -49,7 +62,8 @@ The output of this command is a table that lists all the experiments (DVC Plugin
 
 #### Track experiments
 
-<img width="1741" alt="experiments1" src="https://github.com/avoytkiv/credit-mlops/assets/74664634/8553ea39-ddca-4f7b-83e7-68a8dcb45aed">
+<img width="1741" alt="experiments1" src="https://github.com/avoytkiv/credit-mlops/assets/74664634/8553ea39-ddca-4f7b-83e7-68a8dcb45aed">   
+
 
 <img width="1741" alt="experiments2" src="https://github.com/avoytkiv/credit-mlops/assets/74664634/b58d976c-be61-4eae-8bad-97d6dbd1d0c4">
 
@@ -68,7 +82,7 @@ With the best experiment in mind, we:
 
 ### Continuous Deployment
 
-From here, we can trigger another workflow by pushing a predefined tag. Finally, it will deploy our model to the Heroku platform so anyone with access can use it for prediction.
+From here, we can trigger another workflow by pushing a predefined tag. Finally, it will deploy our model to the `Heroku` using `FastAPI Endpoint`. So anyone with access can use it for prediction.
 
 ## Interpreting results
 
@@ -78,7 +92,8 @@ Compare selected features across our clusters. Though the plot below is unreadab
 
 Summarizing data grouped by clusters across selected features.
 
-<img width="1158" alt="Screenshot 2023-09-13 at 21 15 18" src="https://github.com/avoytkiv/credit-mlops/assets/74664634/0d54eedf-5a26-4507-beec-20d09f540798">
+<img width="1139" alt="Customer_Segmentation_by_clustering_-_Google_Slides" src="https://github.com/avoytkiv/credit-mlops/assets/74664634/1d631b39-0ed6-4ecb-8b20-b79ed4bf9094">   
+
 
 From here start consulting with the business team. 
 
@@ -88,7 +103,7 @@ To run this project, you will need to add the following environment variables to
 `AWS_ACCESS_KEY_ID` - to run experiments on more powerful cloud instance; 
 `AWS_SECRET_ACCESS_KEY` - see above;
 `HEROKU_API_KEY` - to deploy app;
-`TOKEN_GITHUB` - to give permissions for Github workflows.
+`TOKEN_GITHUB` - to give permission for Github workflows.
 
 
 ## TODO
