@@ -1,57 +1,33 @@
-credit-mlops
-==============================
+# Project Title
 
-A short description of the project.
+A brief description of what this project does and who it's for
 
-Project Organization
-------------
+## ML Pipeline Architecture
 
-    ├── LICENSE
-    ├── Makefile           <- Makefile with commands like `make data` or `make train`
-    ├── README.md          <- The top-level README for developers using this project.
-    ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── interim        <- Intermediate data that has been transformed.
-    │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
-    │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
-    │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
-    │
-    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-    │                         the creator's initials, and a short `-` delimited description, e.g.
-    │                         `1.0-jqp-initial-data-exploration`.
-    │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-    │
-    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
-    │
-    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-    │                         generated with `pip freeze > requirements.txt`
-    │
-    ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
-    │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
-    │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
-    └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
+## Demo
+
+### Running ML experiments
+
+### Continuous Integration
+
+### Continuous Deployment
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your repo secrets (Go to repo --> Settings --> Secrets and Variables --> Actions):
+`AWS_ACCESS_KEY_ID` - to run experiments on more powerful cloud instance; 
+`AWS_SECRET_ACCESS_KEY` - see above;
+`HEROKU_API_KEY` - to deploy app;
+`TOKEN_GITHUB` - to give permissions for Github workflows.
 
 
---------
+## TODO
 
-<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
+- [ ] Autoencoder: Debug negative training loss.
+- [ ] Create user interface for the app with Streamlit.
+- [ ] Documentation.
+- [ ] Packaging.
+- [ ] Log metrics with DVC Live.
+- [ ] Validate data and model.
+- [ ] Implement testing (pytest).
+- [ ] Integrate with DagsHub - same as Git but can see not only hashed data but data itself.
